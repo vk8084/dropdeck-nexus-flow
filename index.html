@@ -1,26 +1,359 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dropdeck-nexus-flow</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DropDeck - Crypto Airdrop Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+</head>
+<body class="light-mode">
+    <!-- Header -->
+    <header>
+        <div class="logo">DropDeck</div>
+        <div class="profile-icon" id="profile-icon">
+            <span class="material-symbols-rounded">account_circle</span>
+        </div>
+        <div class="theme-toggle" id="theme-toggle">
+            <span class="material-symbols-rounded">dark_mode</span>
+        </div>
+    </header>
 
-    <meta property="og:title" content="dropdeck-nexus-flow" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <!-- Main Content Area -->
+    <main>
+        <!-- Dashboard Tab Content -->
+        <section id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h3>Total Investment</h3>
+                    <p class="stat-value" id="total-investment">$0</p>
+                    <span class="material-symbols-rounded stat-icon">payments</span>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Earnings</h3>
+                    <p class="stat-value" id="total-earnings">$0</p>
+                    <span class="material-symbols-rounded stat-icon">account_balance</span>
+                </div>
+                <div class="stat-box">
+                    <h3>Projects</h3>
+                    <p class="stat-value"><span id="joined-projects">0</span>/<span id="total-projects">21</span></p>
+                    <span class="material-symbols-rounded stat-icon">rocket_launch</span>
+                </div>
+                <div class="stat-box">
+                    <h3>Tasks</h3>
+                    <p class="stat-value"><span id="completed-tasks">0</span>/<span id="total-tasks">0</span></p>
+                    <span class="material-symbols-rounded stat-icon">assignment_turned_in</span>
+                </div>
+            </div>
+            
+            <div class="projects-header">
+                <h2>My Projects</h2>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" data-toggle="hot">Hot</button>
+                    <button class="toggle-btn" data-toggle="all">All</button>
+                </div>
+            </div>
+            
+            <div class="projects-container" id="my-projects">
+                <!-- My Projects will be added here by JS -->
+                <div class="empty-state">
+                    <span class="material-symbols-rounded">rocket_launch</span>
+                    <p>No projects joined yet</p>
+                    <a href="#" class="explore-link">Explore projects</a>
+                </div>
+            </div>
+            
+            <h2>Latest News</h2>
+            <div class="news-preview" id="news-preview">
+                <!-- News previews will be added here by JS -->
+            </div>
+        </section>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+        <!-- Investment & Earnings Tab Content -->
+        <section id="investment" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-box highlight">
+                    <h3>ROI</h3>
+                    <p class="stat-value" id="roi-value">0%</p>
+                    <span class="material-symbols-rounded stat-icon">trending_up</span>
+                </div>
+                <div class="stat-box highlight">
+                    <h3>Monthly Earnings</h3>
+                    <p class="stat-value" id="monthly-earnings">$0</p>
+                    <span class="material-symbols-rounded stat-icon">calendar_month</span>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <canvas id="earnings-chart" height="200"></canvas>
+            </div>
+            
+            <div class="button-group">
+                <button id="add-investment" class="primary-button">
+                    <span class="material-symbols-rounded">add</span> Add Investment
+                </button>
+                <button id="add-earning" class="primary-button">
+                    <span class="material-symbols-rounded">add</span> Add Earning
+                </button>
+            </div>
+            
+            <h2>History</h2>
+            <div class="history-list" id="transaction-history">
+                <!-- Transaction history will be added here by JS -->
+                <div class="empty-state">
+                    <span class="material-symbols-rounded">history</span>
+                    <p>No transactions yet</p>
+                </div>
+            </div>
+            
+            <!-- Add Investment Modal -->
+            <div id="investment-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Add Investment</h2>
+                    <form id="investment-form">
+                        <div class="form-group">
+                            <label for="investment-project">Project</label>
+                            <select id="investment-project" required>
+                                <option value="">Select a project</option>
+                                <!-- Projects will be added here by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="investment-amount">Amount ($)</label>
+                            <input type="number" id="investment-amount" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investment-date">Date</label>
+                            <input type="date" id="investment-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investment-notes">Notes</label>
+                            <textarea id="investment-notes"></textarea>
+                        </div>
+                        <button type="submit" class="primary-button">Save Investment</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Add Earning Modal -->
+            <div id="earning-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Add Earning</h2>
+                    <form id="earning-form">
+                        <div class="form-group">
+                            <label for="earning-project">Project</label>
+                            <select id="earning-project" required>
+                                <option value="">Select a project</option>
+                                <!-- Projects will be added here by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="earning-amount">Amount ($)</label>
+                            <input type="number" id="earning-amount" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="earning-date">Date</label>
+                            <input type="date" id="earning-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="earning-notes">Notes</label>
+                            <textarea id="earning-notes"></textarea>
+                        </div>
+                        <button type="submit" class="primary-button">Save Earning</button>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+        <!-- Explore Tab Content -->
+        <section id="explore" class="tab-content">
+            <div class="projects-grid" id="explore-projects">
+                <!-- Projects will be added here by JS -->
+            </div>
+            
+            <!-- Project Details Modal -->
+            <div id="project-details-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="back-button">
+                            <span class="material-symbols-rounded">arrow_back</span>
+                        </button>
+                        <h2>Project Details</h2>
+                    </div>
+                    <div id="project-details-content">
+                        <!-- Project details will be added here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Tab Content -->
+        <section id="statistics" class="tab-content">
+            <div class="stats-header">
+                <h2>Performance Overview</h2>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h3>Monthly Performance</h3>
+                    <canvas id="monthly-performance-chart" height="200"></canvas>
+                </div>
+                
+                <div class="chart-wrapper">
+                    <h3>Task Completion</h3>
+                    <canvas id="task-completion-chart" height="200"></canvas>
+                </div>
+            </div>
+            
+            <div class="leaderboard">
+                <h3>Project Leaderboard</h3>
+                <div class="leaderboard-content" id="project-leaderboard">
+                    <!-- Leaderboard will be added here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Tasks Tab Content -->
+        <section id="tasks" class="tab-content">
+            <div class="tasks-header">
+                <h2>My Tasks</h2>
+                <span class="task-count"><span id="completed-tasks-count">0</span>/<span id="total-tasks-count">0</span> Completed</span>
+            </div>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="tasks-progress-bar"></div>
+            </div>
+            
+            <div class="tasks-container" id="tasks-container">
+                <!-- Project tasks will be added here by JS -->
+                <div class="empty-state">
+                    <span class="material-symbols-rounded">task_alt</span>
+                    <p>No tasks yet</p>
+                    <p>Join projects to see tasks here</p>
+                </div>
+            </div>
+            
+            <!-- Add Task Modal -->
+            <div id="add-task-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Add New Task</h2>
+                    <form id="add-task-form">
+                        <div class="form-group">
+                            <label for="task-project">Project</label>
+                            <select id="task-project" required>
+                                <option value="">Select a project</option>
+                                <!-- Projects will be added here by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-name">Task Name</label>
+                            <input type="text" id="task-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-description">Description (optional)</label>
+                            <textarea id="task-description"></textarea>
+                        </div>
+                        <button type="submit" class="primary-button">Add Task</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Tab Content -->
+        <section id="news" class="tab-content">
+            <div class="news-filter">
+                <h2>News & Updates</h2>
+                <div class="tags-container" id="news-tags">
+                    <span class="tag active" data-tag="all">All</span>
+                    <span class="tag" data-tag="airdrop">Airdrops</span>
+                    <span class="tag" data-tag="market">Market</span>
+                    <span class="tag" data-tag="app">App</span>
+                    <span class="tag" data-tag="tokenomics">Tokenomics</span>
+                </div>
+            </div>
+            
+            <div class="news-container" id="news-container">
+                <!-- News items will be added here by JS -->
+            </div>
+            
+            <!-- News Detail Modal -->
+            <div id="news-detail-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="back-button">
+                            <span class="material-symbols-rounded">arrow_back</span>
+                        </button>
+                        <h2>News Detail</h2>
+                    </div>
+                    <div id="news-detail-content">
+                        <!-- News details will be added here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Profile/About Page -->
+        <section id="profile" class="tab-content">
+            <div class="profile-content">
+                <h2>About DropDeck</h2>
+                <div class="profile-info">
+                    <div class="profile-image">
+                        <span class="material-symbols-rounded profile-icon-large">account_circle</span>
+                    </div>
+                    <h3>Your Name</h3>
+                    <p class="profile-bio">Crypto enthusiast and airdrop hunter</p>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <span class="material-symbols-rounded">language</span>
+                            <span>Website</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <span class="material-symbols-rounded">tag</span>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <span class="material-symbols-rounded">code</span>
+                            <span>GitHub</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="app-info">
+                    <h3>About This App</h3>
+                    <p>DropDeck helps you track crypto airdrops, manage tasks, and monitor your investments all in one place.</p>
+                    <p>All data is stored locally on your device.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav id="bottom-nav">
+        <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+            <span class="material-symbols-rounded">dashboard</span>
+        </a>
+        <a href="#investment" class="nav-item" data-tab="investment">
+            <span class="material-symbols-rounded">currency_exchange</span>
+        </a>
+        <a href="#explore" class="nav-item" data-tab="explore">
+            <span class="material-symbols-rounded">explore</span>
+        </a>
+        <a href="#statistics" class="nav-item" data-tab="statistics">
+            <span class="material-symbols-rounded">bar_chart</span>
+        </a>
+        <a href="#tasks" class="nav-item" data-tab="tasks">
+            <span class="material-symbols-rounded">task_alt</span>
+        </a>
+        <a href="#news" class="nav-item" data-tab="news">
+            <span class="material-symbols-rounded">feed</span>
+        </a>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
 </html>
